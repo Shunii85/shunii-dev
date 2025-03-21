@@ -11,12 +11,18 @@ import { getFileNames } from "@/utils"
 
 export const getStaticProps = (async ({ params }) => {
   const path = ["/contents", ...(params?.slug ?? [])].join("/") + ".mdx"
-  const content = readFileSync(process.cwd() + path)
-  const source = await mdx(content.toString())
-  return {
-    props: {
-      source: source,
-    },
+  try {
+    const content = readFileSync(process.cwd() + path)
+    const source = await mdx(content.toString())
+    return {
+      props: {
+        source,
+      },
+    }
+  } catch {
+    return {
+      notFound: true,
+    }
   }
 }) satisfies GetStaticProps<{
   source: MDXRemoteSerializeResult
@@ -34,8 +40,8 @@ export const getStaticPaths = (async ({}) => {
 
 type PageProps = InferGetStaticPropsType<typeof getStaticProps>
 
-const Page: NextPage<PageProps> = ({ source, ...rest }) => {
-  return <MDXRemote {...source} />
+const Page: NextPage<PageProps> = ({ source }) => {
+  return source ? <MDXRemote {...source} /> : null
 }
 
 export default Page
