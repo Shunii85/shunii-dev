@@ -1,13 +1,14 @@
 import { readdirSync } from "fs"
+import { isUndefined } from "./assertion"
 
-export const getRecursivePaths = (path: string): string[] => {
+export const getFileNames = (path: string): string[] => {
   const dirents = readdirSync(path, { withFileTypes: true })
 
-  return dirents.flatMap((dirent) => {
-    const resolvedPath = `${path}/${dirent.name}`
-    if (dirent.isDirectory()) {
-      return getRecursivePaths(resolvedPath)
-    }
-    return resolvedPath
-  })
+  const paths = dirents
+    .map((dirent) => {
+      if (dirent.isFile()) return dirent.name
+      return undefined
+    })
+    .filter((path) => !isUndefined(path))
+  return paths
 }
