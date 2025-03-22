@@ -2,26 +2,26 @@ import {
   GetStaticPaths,
   GetStaticProps,
   InferGetStaticPropsType,
-  NextPage,
+  NextPage
 } from "next"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
 import { mdx } from "@/utils/mdx"
 import { readFileSync } from "fs"
-import { getFileNames } from "@/utils"
+import { getRecursivePaths } from "@/utils"
 
 export const getStaticProps = (async ({ params }) => {
-  const path = ["/contents", ...(params?.slug ?? [])].join("/") + ".mdx"
+  const path = ["/contents", ...(params?.slug ?? ["index"])].join("/") + ".mdx"
   try {
     const content = readFileSync(process.cwd() + path)
     const source = await mdx(content.toString())
     return {
       props: {
-        source,
-      },
+        source
+      }
     }
   } catch {
     return {
-      notFound: true,
+      notFound: true
     }
   }
 }) satisfies GetStaticProps<{
@@ -29,12 +29,16 @@ export const getStaticProps = (async ({ params }) => {
 }>
 
 export const getStaticPaths = (async ({}) => {
-  const paths = getFileNames(process.cwd() + "/contents/").map((name) => {
-    return { params: { slug: [name.replace(".mdx", "")] } }
+  const paths = getRecursivePaths(process.cwd() + "/contents").map((path) => {
+    const relativePath = path
+      .replace(process.cwd() + "/contents/", "")
+      .replace(".mdx", "")
+      .split("/")
+    return { params: { slug: relativePath } }
   })
   return {
-    paths,
-    fallback: false,
+    paths: [...paths, { params: { slug: undefined } }],
+    fallback: false
   }
 }) satisfies GetStaticPaths
 
