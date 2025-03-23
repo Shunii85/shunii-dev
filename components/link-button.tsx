@@ -1,0 +1,23 @@
+import Link from "next/link"
+import { FC, PropsWithChildren } from "react"
+
+interface LinkButtonProps extends PropsWithChildren {
+  className?: string
+  href: string
+}
+
+export const LinkButton: FC<LinkButtonProps> = ({
+  className,
+  children,
+  href
+}) => {
+  return (
+    <Link href={href}>
+      <button
+        className={`rounded-lg px-6 py-2 hover:bg-indigo-700 hover:duration-300 ${className}`}
+      >
+        {children}
+      </button>
+    </Link>
+  )
+}
