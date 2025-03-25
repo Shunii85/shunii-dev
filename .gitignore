@@ -1,9 +1,12 @@
+# generated files
 /node_modules
 
 /.next/
 /out/
 
 /build
+
+.mdx
 
 
 # debug

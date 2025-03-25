@@ -5,15 +5,18 @@ import {
   NextPage
 } from "next"
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote"
+import { mdxComponents } from "@/components/mdx"
 import { mdx } from "@/utils/mdx"
-import { readFileSync } from "fs"
-import { getRecursivePaths } from "@/utils"
+import { contentsMap, slugs } from "mdx"
+import { isArray } from "@/utils"
 
 export const getStaticProps = (async ({ params }) => {
-  const path = ["/contents", ...(params?.slug ?? ["index"])].join("/") + ".mdx"
+  const path = isArray(params?.slug)
+    ? params.slug.join("/")
+    : (params?.slug ?? "")
   try {
-    const content = readFileSync(process.cwd() + path)
-    const source = await mdx(content.toString())
+    const { body } = contentsMap[path]
+    const source = await mdx(body)
     return {
       props: {
         source
@@ -29,13 +32,8 @@ export const getStaticProps = (async ({ params }) => {
 }>
 
 export const getStaticPaths = (async ({}) => {
-  const paths = getRecursivePaths(process.cwd() + "/contents").map((path) => {
-    const relativePath = path
-      .replace(process.cwd() + "/contents/", "")
-      .replace(".mdx", "")
-      .split("/")
-    return { params: { slug: relativePath } }
-  })
+  const paths = slugs.map((slug) => ({ params: { slug: [slug] } }))
+  console.log(paths)
   return {
     paths: [...paths, { params: { slug: undefined } }],
     fallback: false
@@ -45,7 +43,7 @@ export const getStaticPaths = (async ({}) => {
 type PageProps = InferGetStaticPropsType<typeof getStaticProps>
 
 const Page: NextPage<PageProps> = ({ source }) => {
-  return source ? <MDXRemote {...source} /> : null
+  return source ? <MDXRemote {...source} components={mdxComponents} /> : null
 }
 
 export default Page
