@@ -31,11 +31,11 @@ export const getStaticProps = (async ({ params }) => {
   source: MDXRemoteSerializeResult
 }>
 
-export const getStaticPaths = (async ({}) => {
-  const paths = slugs.map((slug) => ({ params: { slug: [slug] } }))
+export const getStaticPaths = (async () => {
+  const paths = slugs.map((slug) => ({ params: { slug } }))
   console.log(paths)
   return {
-    paths: [...paths, { params: { slug: undefined } }],
+    paths,
     fallback: false
   }
 }) satisfies GetStaticPaths
