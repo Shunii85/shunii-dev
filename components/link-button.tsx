@@ -13,9 +13,7 @@ export const LinkButton: FC<LinkButtonProps> = ({
 }) => {
   return (
     <Link href={href}>
-      <button
-        className={`rounded-lg px-6 py-2 hover:bg-indigo-700 hover:duration-300 ${className}`}
-      >
+      <button className={`rounded-lg px-6 py-2 duration-500 ${className}`}>
         {children}
       </button>
     </Link>
