@@ -1,6 +1,6 @@
 {
   "name": "shunii-dev",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -10,10 +10,12 @@
     "gen:mdx": "tsx scripts/mdx/build.ts"
   },
   "dependencies": {
+    "lucide-react": "^0.484.0",
     "next": "15.2.3",
     "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "vaul": "^1.1.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
