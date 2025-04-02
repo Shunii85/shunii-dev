@@ -17,7 +17,7 @@ type Scroll = "up" | "down"
 const linkInfos = [
   { label: "HOME", href: "/" },
   { label: "BLOG", href: "/blog" },
-  { label: "ABOUT", href: "/status" }
+  { label: "ABOUT", href: "/about" }
 ]
 
 export const Header: FC = memo(() => {
@@ -30,11 +30,11 @@ export const Header: FC = memo(() => {
   useEffect(() => {
     window.addEventListener("scroll", () => {
       const { scrollY } = window
-      setY(scrollY)
       setScroll(() => {
         if (scrollY < y) return "up"
         return "down"
       })
+      setY(scrollY)
     })
     return () => {
       window.removeEventListener("scroll", () => {
@@ -47,9 +47,9 @@ export const Header: FC = memo(() => {
     <>
       <header
         ref={headerRef}
-        className={`sticky px-2 py-3 duration-700 ease-in-out sm:px-6 sm:py-5 ${isDisplay ? "translate-y-0" : "-translate-y-32"}`}
+        className={`sticky top-0 z-10 px-2 pt-3 backdrop-blur-sm duration-700 ease-in-out sm:px-6 sm:pt-5 ${isDisplay ? "translate-y-0" : "-translate-y-32"}`}
       >
-        <div className="z-10 flex max-h-18 items-center justify-between rounded-full bg-indigo-900 px-10 py-2 font-bold text-slate-300 sm:px-16 sm:py-5">
+        <div className="z-10 flex max-h-18 items-center justify-between rounded-full bg-indigo-900 px-10 py-2 font-bold sm:px-16 sm:py-5">
           <h1 className="text-xl tracking-tight sm:text-2xl">
             <Link href="/">shunii .dev</Link>
           </h1>
